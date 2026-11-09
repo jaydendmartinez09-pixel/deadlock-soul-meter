@@ -1,13 +1,13 @@
-# Deadlock Soul Meter v13 installer (econ HUD vs the Eternus average for Shiv, Wraith and Holliday).
+# Deadlock Soul Meter v14 installer (econ HUD vs the Eternus average for Shiv, Wraith and Holliday).
 # Run in PowerShell:  irm https://raw.githubusercontent.com/jaydendmartinez09-pixel/deadlock-soul-meter/main/install.ps1 | iex
 # Finds Deadlock through Steam, downloads the mod, checks its SHA-256, and copies it into
 # game\citadel\addons as a free pakNN_dir.vpk (or over an older copy, including the old Wraith Soul Meter).
 # Uninstall: delete that file.
 function Install-SoulMeter {
     $ErrorActionPreference = 'Stop'
-    $zipUrl  = 'https://raw.githubusercontent.com/jaydendmartinez09-pixel/deadlock-soul-meter/main/SoulMeter_v13.zip'
-    $zipHash = '811E4455FD07C50D51F7549767E24DAA6EDCAE63C388E58907B8DFF46F7E2040'
-    $vpkHash = 'BBEF455272A2BBCD23EE20CFE99948CB225F7B9006C05C1E7B25328ED85DFF44'
+    $zipUrl  = 'https://raw.githubusercontent.com/jaydendmartinez09-pixel/deadlock-soul-meter/main/SoulMeter_v14.zip'
+    $zipHash = '4F0E26FE43CA55110CCD25666695878A4798C25A56311DCBCE6982C820F200E6'
+    $vpkHash = 'FC6C923D96A0CDF631D09A7B2222107FC25A55C7BED7F17BCC1C64E7857CF0EF'
     try { [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor 3072 } catch {}
 
     # 1. find game\citadel (Steam registry -> every Steam library in libraryfolders.vdf)
@@ -56,7 +56,7 @@ function Install-SoulMeter {
     New-Item -ItemType Directory -Force $tmp | Out-Null
     try {
         $zip = Join-Path $tmp 'dsm.zip'
-        Write-Host "Downloading Soul Meter v13..."
+        Write-Host "Downloading Soul Meter v14..."
         Invoke-WebRequest -UseBasicParsing -Uri $zipUrl -OutFile $zip
         if ((Get-FileHash $zip -Algorithm SHA256).Hash -ne $zipHash) { Write-Host "Download is corrupt (hash mismatch), nothing installed." -ForegroundColor Red; return }
         Expand-Archive -Path $zip -DestinationPath $tmp -Force
@@ -77,7 +77,7 @@ function Install-SoulMeter {
         Copy-Item $vpk $dest -Force
         Copy-Item (Join-Path $tmp 'README.txt') (Join-Path $addons 'Soul Meter README.txt') -Force
         Remove-Item (Join-Path $addons 'Wraith Soul Meter README.txt') -ErrorAction SilentlyContinue
-        Write-Host "Installed Soul Meter v13 -> $dest" -ForegroundColor Green
+        Write-Host "Installed Soul Meter v14 -> $dest" -ForegroundColor Green
         if (Get-Process deadlock -ErrorAction SilentlyContinue) { Write-Host "Restart Deadlock to load it." -ForegroundColor Yellow }
         Write-Host "Play Shiv, Wraith or Holliday: the meter sits right of SOULS (bottom-left). To remove it, delete $dest"
     } finally {
